@@ -1,5 +1,7 @@
 project(bmalloc)
 
+set(CMAKE_CXX_STANDARD 14)
+
 add_darling_static_library(bmalloc FAT
 	SOURCES
 		bmalloc/Allocator.cpp
