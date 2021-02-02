@@ -82,7 +82,7 @@ constexpr size_t maximumCageSizeReductionForSlide = 4 * bmalloc::Sizes::GB;
 
 // In Linux, if `vm.overcommit_memory = 2` is specified, mmap with large size can fail if it exceeds the size of RAM.
 // So we specify GIGACAGE_ALLOCATION_CAN_FAIL = 1.
-#if BOS(LINUX)
+#if BOS(LINUX) || defined(DARLING)
 #undef GIGACAGE_ALLOCATION_CAN_FAIL
 #define GIGACAGE_ALLOCATION_CAN_FAIL 1
 #endif
