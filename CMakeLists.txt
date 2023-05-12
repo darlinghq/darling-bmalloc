@@ -1,6 +1,6 @@
 project(bmalloc)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(
 	bmalloc
@@ -12,7 +12,6 @@ add_darling_static_library(bmalloc FAT
 		bmalloc/AllIsoHeaps.cpp
 		bmalloc/Allocator.cpp
 		bmalloc/AvailableMemory.cpp
-		bmalloc/bmalloc.cpp
 		bmalloc/Cache.cpp
 		bmalloc/CryptoRandom.cpp
 		bmalloc/Deallocator.cpp
@@ -21,6 +20,7 @@ add_darling_static_library(bmalloc FAT
 		bmalloc/FreeList.cpp
 		bmalloc/Gigacage.cpp
 		bmalloc/Heap.cpp
+		bmalloc/HeapConstants.cpp
 		bmalloc/HeapKind.cpp
 		bmalloc/IsoHeapImpl.cpp
 		bmalloc/IsoPage.cpp
@@ -33,12 +33,12 @@ add_darling_static_library(bmalloc FAT
 		bmalloc/Logging.cpp
 		bmalloc/Mutex.cpp
 		bmalloc/ObjectType.cpp
+		bmalloc/ObjectTypeTable.cpp
 		bmalloc/PerProcess.cpp
-		bmalloc/PerThread.cpp
 		bmalloc/ProcessCheck.mm
 		bmalloc/Scavenger.cpp
-		bmalloc/VMHeap.cpp
 		bmalloc/Zone.cpp
+		bmalloc/bmalloc.cpp
 )
 
 add_darling_library(mbmalloc

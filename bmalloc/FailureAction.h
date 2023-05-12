@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 Apple Inc. All rights reserved.
+ * Copyright (C) 2019 Apple Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -20,46 +20,13 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "PerProcess.h"
-#include "VMHeap.h"
-#include <thread>
+#pragma once
 
 namespace bmalloc {
 
-DEFINE_STATIC_PER_PROCESS_STORAGE(VMHeap);
-
-VMHeap::VMHeap(std::lock_guard<Mutex>&)
-{
-}
-
-LargeRange VMHeap::tryAllocateLargeChunk(size_t alignment, size_t size)
-{
-    // We allocate VM in aligned multiples to increase the chances that
-    // the OS will provide contiguous ranges that we can merge.
-    size_t roundedAlignment = roundUpToMultipleOf<chunkSize>(alignment);
-    if (roundedAlignment < alignment) // Check for overflow
-        return LargeRange();
-    alignment = roundedAlignment;
-
-    size_t roundedSize = roundUpToMultipleOf<chunkSize>(size);
-    if (roundedSize < size) // Check for overflow
-        return LargeRange();
-    size = roundedSize;
-
-    void* memory = tryVMAllocate(alignment, size);
-    if (!memory)
-        return LargeRange();
-    
-    Chunk* chunk = static_cast<Chunk*>(memory);
-    
-#if BOS(DARWIN)
-    PerProcess<Zone>::get()->addRange(Range(chunk->bytes(), size));
-#endif
-
-    return LargeRange(chunk->bytes(), size, 0, 0);
-}
+enum class FailureAction { Crash, ReturnNull };
 
 } // namespace bmalloc

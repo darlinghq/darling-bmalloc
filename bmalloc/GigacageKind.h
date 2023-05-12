@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 Apple Inc. All rights reserved.
+ * Copyright (C) 2020 Apple Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -20,39 +20,17 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VMHeap_h
-#define VMHeap_h
+#pragma once
 
-#include "Chunk.h"
-#include "FixedVector.h"
-#include "HeapKind.h"
-#include "LargeRange.h"
-#include "Map.h"
-#include "StaticPerProcess.h"
-#include "Vector.h"
-#if BOS(DARWIN)
-#include "Zone.h"
-#endif
+namespace Gigacage {
 
-namespace bmalloc {
-
-class BeginTag;
-class EndTag;
-class Heap;
-
-typedef enum { Sync, Async } ScavengeMode;
-
-class VMHeap : public StaticPerProcess<VMHeap> {
-public:
-    VMHeap(std::lock_guard<Mutex>&);
-    
-    LargeRange tryAllocateLargeChunk(size_t alignment, size_t);
+enum Kind {
+    Primitive,
+    JSValue,
+    NumberOfKinds
 };
-DECLARE_STATIC_PER_PROCESS_STORAGE(VMHeap);
 
-} // namespace bmalloc
-
-#endif // VMHeap_h
+} // namespace Gigacage
